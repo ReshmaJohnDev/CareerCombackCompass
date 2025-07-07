@@ -1,19 +1,15 @@
 import React, { useEffect, useState, useRef } from "react";
 import TaskCard from "./TaskCard";
-import {
-  fetchTasks,
-  createTasks,
-  fetchTaskById,
-  updateTaskStatus,
-  updateSubTaskStatus,
-  deleteTask,
-} from "./util/Task";
+import EditTask from "./EditTask"; // Make sure this is correctly imported
+import { fetchTasks, createTasks, updateTask } from "./util/Task";
 
 export default function TaskList({ darkMode }) {
   const [loading, setLoading] = useState(true);
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [editTask, setEditTask] = useState(null); // ✅ for edit modal
+
   const formRef = useRef();
 
   const [formData, setFormData] = useState({
@@ -83,6 +79,23 @@ export default function TaskList({ darkMode }) {
     setFormData({ ...formData, subtasks: updatedSubtasks });
   };
 
+  // ✅ EDIT HANDLERS
+  const handleEdit = (task) => {
+    setShowForm(false); // Hide add form
+    setEditTask(task);
+  };
+
+  const handleSaveTask = async (updatedTask) => {
+    try {
+      await updateTask(updatedTask);
+      setEditTask(null);
+      await loadTasks();
+    } catch (error) {
+      console.error("Failed to update task:", error);
+      setError("Failed to save task changes.");
+    }
+  };
+
   return (
     <div
       className={`p-4 flex flex-col items-center min-h-screen transition-colors duration-500 ${
@@ -92,19 +105,19 @@ export default function TaskList({ darkMode }) {
       <h1 className="text-2xl font-bold mb-6">My Tasks</h1>
 
       <button
-        onClick={() => setShowForm(!showForm)}
-        className={`font-semibold mb-4 px-6 py-2 rounded-xl shadow-lg 
-    transition duration-300 hover:scale-[1.03] 
-    ${
-      darkMode
-        ? "bg-gradient-to-r from-gray-800 via-gray-900 to-black text-white"
-        : "bg-light-gradient text-black"
-    }`}
+        onClick={() => {
+          setEditTask(null); // Hide edit modal
+          setShowForm(!showForm); // Toggle add form
+        }}
+        className={`font-semibold mb-4 px-6 py-2 rounded-xl shadow-lg transition duration-300 hover:scale-[1.03] ${
+          darkMode
+            ? "bg-gradient-to-r from-gray-800 via-gray-900 to-black text-white"
+            : "bg-light-gradient text-black"
+        }`}
       >
         {showForm ? "Cancel" : "Add Task"}
       </button>
 
-      {/* Add Task Form */}
       {showForm && (
         <form
           ref={formRef}
@@ -207,7 +220,6 @@ export default function TaskList({ darkMode }) {
       )}
 
       {loading && <p className="text-gray-500">Loading tasks...</p>}
-
       {error && (
         <div className="bg-red-100 text-red-700 p-3 rounded mb-4 w-full max-w-md text-center">
           {error}
@@ -225,10 +237,20 @@ export default function TaskList({ darkMode }) {
               key={task.id}
               task={task}
               onUpdate={loadTasks}
+              onEdit={handleEdit} // ✅ pass handler
               darkMode={darkMode}
             />
           ))}
         </div>
+      )}
+
+      {/* ✅ Render edit modal globally to prevent overlap flicker */}
+      {editTask && (
+        <EditTask
+          task={editTask}
+          onClose={() => setEditTask(null)}
+          onSave={handleSaveTask}
+        />
       )}
     </div>
   );
