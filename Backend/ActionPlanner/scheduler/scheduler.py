@@ -8,7 +8,7 @@ def start():
     scheduler.add_job(
         run_due_reminders,
         'interval',
-        minutes=10,
+        minutes=1,
         misfire_grace_time=300
     )
     scheduler.start()
