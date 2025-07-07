@@ -1,18 +1,14 @@
-import React, { useState } from "react";
+// TaskCard.jsx
+import React from "react";
 import { Trash2 } from "lucide-react";
 import {
   updateSubTaskStatus,
   updateTaskStatus,
   fetchTaskById,
   deleteTask,
-  updateTask,
 } from "./util/Task";
-import EditTask from "./EditTask";
 
-const TaskCard = ({ task, onUpdate, darkMode }) => {
-  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
-
+const TaskCard = ({ task, onUpdate, onEdit, darkMode }) => {
   const completedSubtasksCount = task.subtasks.filter(
     (st) => st.completed
   ).length;
@@ -48,16 +44,6 @@ const TaskCard = ({ task, onUpdate, darkMode }) => {
     }
   };
 
-  const handleSaveTask = async (updatedTask) => {
-    try {
-      await updateTask(updatedTask);
-      onUpdate?.();
-      setShowEditModal(false);
-    } catch (error) {
-      console.error("Failed to update task:", error);
-    }
-  };
-
   return (
     <div
       className={`bg-gradient-to-r from-gray-700 via-gray-900 to-black rounded-xl shadow-lg cursor-pointer transition duration-300 hover:scale-[1.03] p-5 flex flex-col border border-gray-700 ${
@@ -67,17 +53,17 @@ const TaskCard = ({ task, onUpdate, darkMode }) => {
       <div className="flex justify-end space-x-2 relative">
         <button
           className="text-white-500 hover:text-red-500"
-          onClick={() => setShowDeleteAlert(true)}
-          title="Delete Task"
-        >
-          <Trash2 className="w-5 h-5" />
-        </button>
-        <button
-          className="text-white hover:text-blue-400"
-          onClick={() => setShowEditModal(true)}
+          onClick={() => onEdit(task)} // Just call onEdit passed from parent
           title="Edit Task"
         >
           ✏️
+        </button>
+        <button
+          className="text-white hover:text-red-500"
+          onClick={() => handleDeleteSubtask(task.id)}
+          title="Delete Task"
+        >
+          <Trash2 className="w-5 h-5" />
         </button>
       </div>
 
@@ -177,48 +163,6 @@ const TaskCard = ({ task, onUpdate, darkMode }) => {
           ))}
         </ul>
       </div>
-
-      {showDeleteAlert && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
-          <div
-            className={`bg-${
-              darkMode ? "gray-800" : "white"
-            } p-6 rounded-xl max-w-sm w-full shadow-lg ${
-              darkMode ? "text-gray-100" : "text-gray-800"
-            }`}
-          >
-            <p className="mb-4">Are you sure you want to delete this task?</p>
-            <div className="flex justify-end gap-4">
-              <button
-                onClick={() => {
-                  handleDeleteSubtask(task.id);
-                  setShowDeleteAlert(false);
-                }}
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold"
-              >
-                Delete
-              </button>
-              <button
-                onClick={() => setShowDeleteAlert(false)}
-                className={`px-4 py-2 rounded-lg font-semibold ${
-                  darkMode
-                    ? "bg-red-600 hover:bg-red-700 text-white"
-                    : "bg-red-600 hover:bg-red-700 text-white"
-                }`}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-      {showEditModal && (
-        <EditTask
-          task={task}
-          onClose={() => setShowEditModal(false)}
-          onSave={handleSaveTask}
-        />
-      )}
     </div>
   );
 };
