@@ -15,6 +15,7 @@ def get_due_reminders(session: Session):
     return tasks
 
 def run_due_reminders():
+    print("🔔 run_due_reminders triggered")
     session = next(get_session())
     try:
         tasks = get_due_reminders(session)
