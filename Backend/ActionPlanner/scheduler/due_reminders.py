@@ -6,6 +6,8 @@ from ActionPlanner.scheduler.email_utils import send_email
 
 def get_due_reminders(session: Session):
     now = datetime.now(timezone.utc)
+    print(f"🕒 Now: {now.isoformat()}", flush=True)
+    print(f"⏳ Looking for reminders between {now - timedelta(minutes=5)} and {now + timedelta(minutes=30)}", flush=True)
     reminder_window = now + timedelta(minutes=30)
     tasks = session.query(Task).filter(
         Task.reminder_enabled == True,
