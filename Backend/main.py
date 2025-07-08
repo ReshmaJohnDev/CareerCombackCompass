@@ -4,9 +4,7 @@ from GapGenerator.routes.gap_routes import router as gap_router
 from Login.routes.login_routes import router as login_router
 from fastapi.middleware.cors import CORSMiddleware
 from ActionPlanner.routes.action_planner_route import router as action_planner
-from ActionPlanner.scheduler.scheduler import start_scheduler, shutdown_scheduler
-
-
+from ActionPlanner.scheduler.scheduler import start_scheduler as scheduler_start, shutdown_scheduler as scheduler_shutdown
 
 
 #Initializing the Fast API
@@ -35,8 +33,8 @@ def root():
 
 @app.on_event("startup")
 def start_scheduler():
-    start_scheduler()
+    scheduler_start()
 
 @app.on_event("shutdown")
 def shutdown_scheduler():
-    shutdown_scheduler()
+    scheduler_shutdown()
