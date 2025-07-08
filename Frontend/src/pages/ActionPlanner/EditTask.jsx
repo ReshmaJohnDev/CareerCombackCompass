@@ -43,10 +43,7 @@ export default function EditTask({ task, onClose, onSave }) {
   };
 
   const addNewSubtask = () => {
-    setEditedSubtasks([
-      ...editedSubtasks,
-      { id: null, title: "", completed: false },
-    ]);
+    setEditedSubtasks([...editedSubtasks, { title: "", completed: false }]);
   };
 
   const handleSaveEdit = () => {
@@ -60,7 +57,10 @@ export default function EditTask({ task, onClose, onSave }) {
       title: editedTitle.trim(),
       description: editedDescription.trim(),
       reminder_enabled: editedReminderEnabled,
-      reminder: editedReminder || null,
+      reminder:
+        editedReminderEnabled && editedReminder
+          ? new Date(editedReminder).toISOString()
+          : null,
       subtasks: editedSubtasks
         .filter((st) => st.title.trim() !== "")
         .map((st) => ({
