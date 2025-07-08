@@ -19,6 +19,7 @@ def run_due_reminders():
     session = next(get_session())
     try:
         tasks = get_due_reminders(session)
+        print(f"📋 Found {len(tasks)} tasks due for reminders", flush=True)
         for task in tasks:
           if task.reminder_email:
             subject = f"Reminder: {task.title}"
