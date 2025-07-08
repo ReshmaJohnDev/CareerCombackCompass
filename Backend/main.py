@@ -4,7 +4,7 @@ from GapGenerator.routes.gap_routes import router as gap_router
 from Login.routes.login_routes import router as login_router
 from fastapi.middleware.cors import CORSMiddleware
 from ActionPlanner.routes.action_planner_route import router as action_planner
-from ActionPlanner.scheduler.scheduler import start, shutdown
+from ActionPlanner.scheduler.scheduler import start_schedule, shutdown_scheduler
 
 
 
@@ -34,8 +34,8 @@ def root():
 
 @app.on_event("startup")
 async def start_scheduler():
-    start()
+    start_scheduler()
 
 @app.on_event("shutdown")
 async def shutdown_scheduler():
-    shutdown()
+    shutdown_scheduler()
