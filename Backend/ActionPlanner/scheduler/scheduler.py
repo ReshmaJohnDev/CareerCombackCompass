@@ -1,7 +1,7 @@
 from apscheduler.schedulers.background import BackgroundScheduler
 from ActionPlanner.scheduler.due_reminders import run_due_reminders
 
-scheduler = BackgroundScheduler()
+scheduler = AsyncIOScheduler()
 
 def dummy_job():
     print("Dummy job triggered")
