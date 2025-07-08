@@ -1,5 +1,5 @@
 from sqlalchemy import (
-    Column, Integer, String, Boolean, DateTime, ForeignKey
+    Column, Integer, String, Boolean, DateTime, ForeignKey,TIMESTAMP
 )
 from shared.base import Base
 from sqlalchemy.orm import relationship
@@ -13,7 +13,7 @@ class Task(Base):
     completed = Column(Boolean, default=False, nullable=False)
     
     # Reminder on main task only
-    reminder = Column(DateTime, nullable=True)
+    reminder = Column(TIMESTAMP(timezone=True), nullable=True)
     reminder_email = Column(String, nullable=True)
     reminder_enabled = Column(Boolean, default=False, nullable=False)
     reminder_sent = Column(Boolean, default=False, nullable=False)
