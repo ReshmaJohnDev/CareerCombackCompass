@@ -3,11 +3,14 @@ from ActionPlanner.scheduler.due_reminders import run_due_reminders
 
 scheduler = BackgroundScheduler()
 
+def dummy_job():
+    print("Dummy job triggered")
+
 def start():
     print("✅ Scheduler starting.")
     try:
         scheduler.add_job(
-            run_due_reminders,
+            dummy_job,
             'interval',
             minutes=1,
             misfire_grace_time=300
