@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query,status
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from datetime import date,timezone
-from ..schema.pydantic_models  import TaskCreate, TaskRead, SubTaskCreate,TaskUpdate
+from ..schema.pydantic_models  import TaskCreate, TaskRead, SubTaskCreate,TaskUpdate,SubTaskRead
 from ..models.data_models import Task, SubTask
 from ..data_manager.sqlite_data_manager import get_session
 from sqlalchemy.exc import IntegrityError
@@ -76,7 +76,7 @@ def update_task_completion(task_id: int, completed: bool, db: Session = Depends(
 
 
  # Update subtask completion status
-@router.patch("/subtasks/{subtask_id}/complete", response_model=SubTaskCreate)
+@router.patch("/subtasks/{subtask_id}/complete", response_model=SubTaskRead)
 def update_subtask_completion(subtask_id: int, completed: bool, db: Session = Depends(get_session)):
     subtask = db.query(SubTask).filter(SubTask.id == subtask_id).first()
     if not subtask:
