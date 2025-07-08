@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Query,status
 from sqlalchemy.orm import Session
 from typing import List, Optional
-from datetime import date
+from datetime import date,timezone
 from ..schema.pydantic_models  import TaskCreate, TaskRead, SubTaskCreate,TaskUpdate
 from ..models.data_models import Task, SubTask
 from ..data_manager.sqlite_data_manager import get_session
@@ -16,11 +16,21 @@ router = APIRouter(
 
 @router.post("/", response_model=TaskRead, status_code=status.HTTP_201_CREATED)
 def create_task(task_in: TaskCreate, db: Session = Depends(get_session)):
+    reminder = task_in.reminder
+    if reminder:
+        # If the incoming datetime is naive (no tzinfo), assume UTC (or your desired timezone)
+        if reminder.tzinfo is None:
+            reminder = reminder.replace(tzinfo=timezone.utc)
+        else:
+            # Convert to UTC timezone if not already
+            reminder = reminder.astimezone(timezone.utc)
+
+
     task = Task(
         title=task_in.title,
         description=task_in.description,
         completed=task_in.completed,
-        reminder=task_in.reminder,
+        reminder=reminder,
         reminder_email=str(task_in.reminder_email) if task_in.reminder_email else None,
         reminder_enabled=task_in.reminder_enabled,
     )
@@ -92,6 +102,15 @@ def update_task(task_id: int, task_in: TaskUpdate, db: Session = Depends(get_ses
     task = db.query(Task).filter(Task.id == task_id).first()
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
+    
+    # Handle reminder datetime with timezone awareness if present in update
+    if task_in.reminder is not None:
+        reminder = task_in.reminder
+        if reminder.tzinfo is None:
+            reminder = reminder.replace(tzinfo=timezone.utc)
+        else:
+            reminder = reminder.astimezone(timezone.utc)
+        setattr(task, "reminder", reminder)
 
     # Update main task fields
     for field, value in task_in.dict(exclude_unset=True).items():
