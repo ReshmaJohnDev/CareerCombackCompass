@@ -33,9 +33,9 @@ def root():
 
 
 @app.on_event("startup")
-def start_scheduler():
+async def start_scheduler():
     start()
 
 @app.on_event("shutdown")
-def shutdown_scheduler():
+async def shutdown_scheduler():
     shutdown()
