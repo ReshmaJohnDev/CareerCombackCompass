@@ -1,27 +1,18 @@
+# scheduler.py
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from ActionPlanner.scheduler.due_reminders import run_due_reminders
 
 scheduler = AsyncIOScheduler()
 
 def dummy_job():
-    print("Dummy job triggered")
+    print("Dummy job triggered", flush=True)
 
-def start():
-    print("✅ Scheduler starting.")
-    try:
-        scheduler.add_job(
-            dummy_job,
-            'interval',
-            minutes=1,
-            misfire_grace_time=300
-        )
-        scheduler.start()
-        print("✅ Scheduler started.")
-    except Exception as e:
-        print(f"Scheduler start failed: {e}")
+def start_scheduler():
+    print("✅ Scheduler starting.", flush=True)
+    scheduler.add_job(dummy_job, 'interval', seconds=10, misfire_grace_time=300)
+    scheduler.start()
+    print("✅ Scheduler started.", flush=True)
 
-
-def shutdown():
-    print("🛑 Shutting down scheduler...")
+def shutdown_scheduler():
+    print("🛑 Shutting down scheduler...", flush=True)
     scheduler.shutdown()
-    print("✅ Scheduler shutdown complete.")
+    print("✅ Scheduler shutdown complete.", flush=True)
