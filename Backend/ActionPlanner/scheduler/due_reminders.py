@@ -15,7 +15,7 @@ def get_due_reminders(session: Session):
     return tasks
 
 def run_due_reminders():
-    print("🔔 run_due_reminders triggered")
+    print("🔔 run_due_reminders triggered", flush=True)
     session = next(get_session())
     try:
         tasks = get_due_reminders(session)
@@ -27,12 +27,12 @@ def run_due_reminders():
                send_email(task.reminder_email, subject, body)
                task.reminder_sent = True
                session.commit() 
-               print(f" [✅] Reminder sent for task {task.id}")
+               print(f" [✅] Reminder sent for task {task.id}",flush=True)
             except Exception as e:
-               print(f" [❌] Failed to send email for task {task.id}: {str(e)}")
+               print(f" [❌] Failed to send email for task {task.id}: {str(e)}",flush=True)
 
     except Exception as e:
-        print(f" [🔥] Unexpected error in run_due_reminders: {str(e)}")
+        print(f" [🔥] Unexpected error in run_due_reminders: {str(e)}",flush=True)
 
     finally:
         session.close()
