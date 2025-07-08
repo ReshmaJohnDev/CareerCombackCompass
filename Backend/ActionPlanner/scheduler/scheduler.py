@@ -4,7 +4,7 @@ from ActionPlanner.scheduler.due_reminders import run_due_reminders
 scheduler = BackgroundScheduler()
 
 def start():
-    print("✅ Scheduler started.")
+    print("✅ Scheduler starting.")
     scheduler.add_job(
         run_due_reminders,
         'interval',
