@@ -1,4 +1,4 @@
-from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from ActionPlanner.scheduler.due_reminders import run_due_reminders
 
 scheduler = AsyncIOScheduler()
