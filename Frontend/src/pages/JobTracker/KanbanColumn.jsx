@@ -132,7 +132,14 @@ export const KanbanColumn = ({
                     </option>
                   ))}
                 </select>
+                <label
+                  htmlFor="edit-applied-date"
+                  className="block text-sm font-medium mb-1"
+                >
+                  Applied Date
+                </label>
                 <input
+                  id="edit-applied-date"
                   type="date"
                   value={editFormData.applied_date}
                   onChange={(e) =>
@@ -144,6 +151,7 @@ export const KanbanColumn = ({
                   className="w-full px-3 py-2 rounded-lg bg-gray-700 border border-gray-600 placeholder-gray-400"
                   required
                 />
+
                 <input
                   type="url"
                   value={editFormData.application_link}
@@ -164,7 +172,14 @@ export const KanbanColumn = ({
                   placeholder="Notes"
                   className="w-full px-3 py-2 rounded-lg bg-gray-700 border border-gray-600 placeholder-gray-400"
                 />
+                <label
+                  htmlFor="edit-follow-up-date"
+                  className="block text-sm font-medium mb-1"
+                >
+                  Follow-Up Date
+                </label>
                 <input
+                  id="edit-follow-up-date"
                   type="date"
                   value={editFormData.follow_up_date}
                   onChange={(e) =>
@@ -297,7 +312,14 @@ export const KanbanColumn = ({
             className="w-full px-3 py-2 rounded-lg bg-gray-700 border border-gray-600 placeholder-gray-400"
             required
           />
+          <label
+            htmlFor="applied-date"
+            className="block text-sm font-medium mb-1"
+          >
+            Applied Date
+          </label>
           <input
+            id="applied-date"
             type="date"
             placeholder="Applied Date"
             value={formData.applied_date}
@@ -324,7 +346,14 @@ export const KanbanColumn = ({
             }
             className="w-full px-3 py-2 rounded-lg bg-gray-700 border border-gray-600 placeholder-gray-400"
           />
+          <label
+            htmlFor="followup-date"
+            className="block text-sm font-medium mb-1"
+          >
+            Follow-Up Date
+          </label>
           <input
+            id="followup-date"
             type="date"
             placeholder="Follow Up Date"
             value={formData.follow_up_date}
