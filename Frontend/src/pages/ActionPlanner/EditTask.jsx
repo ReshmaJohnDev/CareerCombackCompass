@@ -43,7 +43,7 @@ export default function EditTask({ task, onClose, onSave }) {
   };
 
   const addNewSubtask = () => {
-    setEditedSubtasks([...editedSubtasks, { title: "", completed: false }]);
+    setEditedSubtasks([...editedSubtasks, { id: null,title: "", completed: false }]);
   };
 
   const handleSaveEdit = () => {
